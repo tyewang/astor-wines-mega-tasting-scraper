@@ -18,7 +18,7 @@ app.secret_key = os.environ["SECRET_KEY"]
 blueprint = make_google_blueprint(
     client_id=GOOGLE_CLIENT_ID,
     client_secret=GOOGLE_CLIENT_SECRET,
-    scope=["calendar.events"],
+    scope=["https://www.googleapis.com/auth/calendar.events"],
     offline=True,
 )
 app.register_blueprint(blueprint, url_prefix="/login")

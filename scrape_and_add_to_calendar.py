@@ -1,6 +1,6 @@
 from datetime import datetime, time
 import os
-import pickle
+import dill
 
 import redis
 
@@ -31,5 +31,5 @@ if __name__ == "__main__":
         for pickled_session in redis_instance.lrange(
             "authorized.google.sessions", 0, -1
         ):
-            session = pickle.loads(pickled_session)
+            session = dill.loads(pickled_session)
             session.post("calendar/v3/calendars/primary/events", event)

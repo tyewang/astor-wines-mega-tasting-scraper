@@ -1,5 +1,5 @@
 import os
-import pickle
+import dill
 
 from flask import Flask, redirect, url_for
 from flask_dance.contrib.google import make_google_blueprint, google
@@ -29,5 +29,5 @@ def serve_google_oauth():
     if not google.authorized:
         return redirect(url_for("google.login"))
 
-    redis_instance.sadd("google.credentials", pickle.dumps(google))
+    redis_instance.sadd("google.credentials", dill.dumps(google))
     return "You're in! Astor Wines mega tastings will now start appearing on your Google calendar."

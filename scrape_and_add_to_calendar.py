@@ -14,7 +14,7 @@ redis_instance = redis.from_url(os.environ["REDIS_URL"], decode_responses=True)
 if __name__ == "__main__":
     mega_tastings = scraper.get_all_mega_tasting_events(astor_wine_gateway)
     if mega_tastings:
-        print(f'Found {len(mega_tastings)} mega tastings!')
+        print(f"Found {len(mega_tastings)} mega tastings!")
 
     for mt in mega_tastings:
         event = {
@@ -31,8 +31,6 @@ if __name__ == "__main__":
             },
         }
 
-        for pickled_session in redis_instance.lrange(
-            "authorized.google.sessions", 0, -1
-        ):
+        for pickled_session in redis_instance.smembers("authorized.google.sessions"):
             session = dill.loads(pickled_session)
             session.post("calendar/v3/calendars/primary/events", event)

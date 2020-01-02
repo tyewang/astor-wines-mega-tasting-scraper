@@ -29,5 +29,5 @@ def serve_google_oauth():
     if not google.authorized:
         return redirect(url_for("google.login"))
 
-    redis_instance.sadd("google.credentials", dill.dumps(google))
+    redis_instance.sadd("authorized.google.sessions", dill.dumps(google))
     return "You're in! Astor Wines mega tastings will now start appearing on your Google calendar."

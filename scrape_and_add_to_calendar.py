@@ -1,14 +1,15 @@
 from datetime import datetime, time
 import os
-import dill
 
 import redis
+from requests_oauthlib import OAuth2Session
 
 import astor_wine_gateway
 import scraper
 
 
 redis_instance = redis.from_url(os.environ["REDIS_URL"], decode_responses=True)
+GOOGLE_CLIENT_ID = os.environ["GOOGLE_CLIENT_ID"]
 
 
 if __name__ == "__main__":
@@ -31,6 +32,8 @@ if __name__ == "__main__":
             },
         }
 
-        for pickled_session in redis_instance.smembers("authorized.google.sessions"):
-            session = dill.loads(pickled_session)
-            session.post("calendar/v3/calendars/primary/events", event)
+        for token in redis_instance.smembers("authorized.google.tokens"):
+            google = OAuth2Session(GOOGLE_CLIENT_ID, token={"access_token": token})
+            google.post(
+                "https://www.googleapis.com/calendar/v3/calendars/primary/events", event
+            )

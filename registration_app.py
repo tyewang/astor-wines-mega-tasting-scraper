@@ -1,5 +1,4 @@
 import os
-import dill
 
 from flask import Flask, redirect, url_for
 from flask_dance.contrib.google import make_google_blueprint, google
@@ -29,5 +28,5 @@ def serve_google_oauth():
     if not google.authorized:
         return redirect(url_for("google.login"))
 
-    redis_instance.sadd("authorized.google.sessions", dill.dumps(google))
+    redis_instance.sadd("authorized.google.tokens", google.token['access_token'])
     return "You're in! Astor Wines mega tastings will now start appearing on your Google calendar."

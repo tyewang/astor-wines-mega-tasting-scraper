@@ -1,3 +1,4 @@
+import json
 import os
 
 from flask import Flask, redirect, url_for
@@ -28,5 +29,5 @@ def serve_google_oauth():
     if not google.authorized:
         return redirect(url_for("google.login"))
 
-    redis_instance.sadd("authorized.google.tokens", google.token['access_token'])
+    redis_instance.sadd("authorized.google.tokens", json.dumps(google.token))
     return "You're in! Astor Wines mega tastings will now start appearing on your Google calendar."

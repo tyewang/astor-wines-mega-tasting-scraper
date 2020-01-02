@@ -1,4 +1,5 @@
 from datetime import datetime, time
+import json
 import os
 
 import redis
@@ -33,7 +34,7 @@ if __name__ == "__main__":
         }
 
         for token in redis_instance.smembers("authorized.google.tokens"):
-            google = OAuth2Session(GOOGLE_CLIENT_ID, token={"access_token": token})
+            google = OAuth2Session(GOOGLE_CLIENT_ID, token=json.loads(token))
             google.post(
                 "https://www.googleapis.com/calendar/v3/calendars/primary/events", event
             )
